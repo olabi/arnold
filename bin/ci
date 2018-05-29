@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+IMAGE="arnold:$(tr -d '\n' < VERSION)"
+
+# Build Arnold docker image
+_build() {
+  docker info
+  docker build -t ${IMAGE} .
+  docker images
+  mkdir -p /tmp/docker/images
+  docker save -o /tmp/docker/images/arnold.tar ${IMAGE}
+}
+
+# Test Arnold docker image
+_test() {
+  docker load < /tmp/docker/images/arnold.tar
+  docker images
+  echo "oc must be installed"
+  docker run --rm \
+    -e OC_LOGIN=false \
+    ${IMAGE} \
+    oc version
+  echo "ansible must be installed"
+  docker run --rm \
+    -e OC_LOGIN=false \
+    ${IMAGE} \
+    ansible --version
+}
+
+_$1
