@@ -85,7 +85,6 @@ openshift_jobs:
   - openshift/edxapp/job/db_migrate.yml
   - openshift/richie/job/collectstatic.yml
   - openshift/richie/job/db_migrate.yml
-  - openshift/richie/job/regenerate_indexes.yml
 openshift_routes:
   - openshift/common/route/cms.yml
   - openshift/common/route/lms.yml
