@@ -15,6 +15,15 @@ jobs:
           docker_layer_caching: true
       - run: bin/ci docker_lint
 
+  bash_lint:
+    <<: *defaults
+    steps:
+      - checkout
+      # Activate dind
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: bin/ci bash_lint
+
 # Build Arnold's docker image
   build:
     <<: *defaults
@@ -49,12 +58,14 @@ jobs:
 
 workflows:
   version: 2
-  build_test_and_deploy:
+  lint_build_and_test:
     jobs:
       - docker_lint
+      - bash_lint
       - build:
           requires:
             - docker_lint
+            - bash_lint
       - test:
           requires:
             - build

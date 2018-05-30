@@ -15,5 +15,12 @@ and GitLab-CI philosophies are quite close.
 ## Dockerfile Linter
 [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint) help us to
 build a [best practice](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
-Docker image. It also use [ShellCheck](https://github.com/koalaman/shellcheck)
+Docker image.
+
+It also use [ShellCheck](https://github.com/koalaman/shellcheck)
 to lint the Bash code inside `RUN` instructions.
+
+## Shell Linter
+[ShellCheck](https://github.com/koalaman/shellcheck) is a GPLv3 tool that gives warnings and suggestions for bash/sh shell scripts.
+
+See the [gallery of bad code](https://github.com/koalaman/shellcheck/blob/master/README.md#user-content-gallery-of-bad-code) for examples of what ShellCheck can help you identify!

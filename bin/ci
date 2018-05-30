@@ -34,4 +34,10 @@ _docker_lint() {
   docker run --rm -i hadolint/hadolint < Dockerfile
 }
 
+_bash_lint() {
+  # https://github.com/koalaman/shellcheck
+  sudo apt-get install shellcheck
+  shellcheck --shell=bash bin/*
+}
+
 _$1
