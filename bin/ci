@@ -29,4 +29,9 @@ _test() {
     ansible --version
 }
 
+_docker_lint() {
+  # https://github.com/hadolint/hadolint
+  docker run --rm -i hadolint/hadolint < Dockerfile
+}
+
 _$1

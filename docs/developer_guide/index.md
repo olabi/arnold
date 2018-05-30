@@ -7,3 +7,4 @@
 3.  [Using Ansible playbooks](./playbooks.md)
 4.  [Working with routes](./routes_aliases.md)
 5.  [Hello customer](./hello.md)
+6.  [CI](./CI.md)
