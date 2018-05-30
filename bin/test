@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-playbooks=$(ls *.yml)
-
-echo "Ansible: check syntax"
-# Run a command in Arnold's container
-for playbook in $playbooks; do
-  ansible-playbook $playbook --syntax-check
-done

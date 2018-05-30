@@ -3,6 +3,36 @@
 set -eo pipefail
 
 IMAGE="arnold:$(tr -d '\n' < VERSION)"
+ANSIBLE_LINT_RULES_DIR="${HOME}/.ansible_lint_rules"
+
+# The Linters
+_setup_ansible(){
+  pip install -r requirements.txt --user
+  pip install ansible-lint --user
+  git clone git@github.com:tsukinowasha/ansible-lint-rules.git ${ANSIBLE_LINT_RULES_DIR}
+}
+
+_docker_lint() {
+  # https://github.com/hadolint/hadolint
+  docker run --rm -i hadolint/hadolint < Dockerfile
+}
+
+_bash_lint() {
+  # https://github.com/koalaman/shellcheck
+  sudo apt-get install shellcheck
+  shellcheck --shell=bash bin/*
+}
+
+_ansible_lint(){
+  _setup_ansible
+  export PATH=${HOME}/.local/bin/:$PATH
+  echo "---> Ansible: check syntax"
+  ansible-playbook --syntax-check *.yml
+
+  echo "---> Ansible: lint"
+  # https://github.com/willthames/ansible-lint
+  ansible-lint -R -r "${ANSIBLE_LINT_RULES_DIR}/rules" *.yml
+}
 
 # Build Arnold docker image
 _build() {
@@ -27,17 +57,6 @@ _test() {
     -e OC_LOGIN=false \
     ${IMAGE} \
     ansible --version
-}
-
-_docker_lint() {
-  # https://github.com/hadolint/hadolint
-  docker run --rm -i hadolint/hadolint < Dockerfile
-}
-
-_bash_lint() {
-  # https://github.com/koalaman/shellcheck
-  sudo apt-get install shellcheck
-  shellcheck --shell=bash bin/*
 }
 
 _$1

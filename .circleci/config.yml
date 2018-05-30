@@ -6,14 +6,14 @@ defaults: &defaults
 version: 2
 jobs:
 
-  docker_lint:
+  ansible_lint:
     <<: *defaults
     steps:
       - checkout
       # Activate dind
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: bin/ci docker_lint
+      - run: bin/ci ansible_lint
 
   bash_lint:
     <<: *defaults
@@ -23,6 +23,15 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run: bin/ci bash_lint
+
+  docker_lint:
+    <<: *defaults
+    steps:
+      - checkout
+      # Activate dind
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: bin/ci docker_lint
 
 # Build Arnold's docker image
   build:
@@ -60,12 +69,14 @@ workflows:
   version: 2
   lint_build_and_test:
     jobs:
-      - docker_lint
+      - ansible_lint
       - bash_lint
+      - docker_lint
       - build:
           requires:
-            - docker_lint
+            - ansible_lint
             - bash_lint
+            - docker_lint
       - test:
           requires:
             - build
